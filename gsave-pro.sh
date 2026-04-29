@@ -23,6 +23,12 @@ fi
 # Folder mein jao
 cd ~/$REPO
 
+# Git init karo agar nahi hai
+if [ ! -d .git ]; then
+    echo "🔧 Git init kar raha hoon..."
+    git init
+fi
+
 # Branch fix karo
 git symbolic-ref HEAD refs/heads/main 2>/dev/null
 git branch -m master main 2>/dev/null
@@ -36,6 +42,14 @@ fi
 # Pull karo
 git config pull.rebase false
 git pull origin main --allow-unrelated-histories 2>/dev/null
+
+# Pehli baar sab files add karo jo untracked hain
+if git status | grep -q "Untracked\|untracked"; then
+    echo "📦 Pehli baar saari files track kar raha hoon..."
+    git add .
+    git commit -m "pehli baar saari files add ki" 2>/dev/null
+    git push -u origin main 2>/dev/null
+fi
 
 # Files dikhaao
 echo ""
